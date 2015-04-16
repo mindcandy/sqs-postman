@@ -17,8 +17,8 @@ function checkOption(optionName, options) {
 // program config
 program
   .version(package.version)
-  .option('-p, --aws-profile <value>', 'Specifies AWS profile name', 'default')
-  .option('-r, --aws-region <id>', 'Specifies the AWS region', 'eu-west-1');
+  .option('-p, --aws-profile <value>', 'Specifies AWS profile name. It defaults to default', 'default')
+  .option('-r, --aws-region <id>', 'Specifies the AWS region. It defaults to eu-west-1', 'eu-west-1');
 
 program
   .command('message <queue>')
