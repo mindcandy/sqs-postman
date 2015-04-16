@@ -79,6 +79,14 @@ Sends 15 messages to queue using custom profile and specific AWS region
 $ postman message my-queue --aws-profile my-profile --aws-region us-east-1 --message-source ./message.json --total 15
 ```
 
+## Debugging
+
+Postman uses the [debug](https://github.com/visionmedia/debug) module, and can be enabled as follows:
+
+```bash
+$ DEBUG=postman* postman ...
+```
+
 ## License
 
 MIT
