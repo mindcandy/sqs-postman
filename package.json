@@ -1,0 +1,30 @@
+{
+  "name": "postman",
+  "version": "0.0.0",
+  "description": "Small app that sends many messages to AWS SQS",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:mindcandy/postman.git"
+  },
+  "main": "index.js",
+  "bin": {
+    "postman": "./bin/postman"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aws",
+    "sqs",
+    "messages"
+  ],
+  "author": "Jose Maria Nunez-Izu",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^0.9.0",
+    "aws-sdk": "^2.1.23",
+    "commander": "^2.8.0",
+    "debug": "^2.1.3",
+    "node-uuid": "^1.4.3"
+  }
+}

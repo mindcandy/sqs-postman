@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+var debug = require('debug')('postman-bin');
+var program = require('commander');
+var Postman = require('../');
+var package = require('../package');
+
+function checkOption(optionName, options) {
+  options = options || program;
+  if (!options[optionName]) {
+    console.error('  err: option ' + optionName + ' is missing');
+    program.help();
+    program.exit(1);
+  }
+}
+
+// program config
+program
+  .version(package.version)
+  .option('-p, --aws-profile <value>', 'Specifies AWS profile name', 'default')
+  .option('-r, --aws-region <id>', 'Specifies the AWS region', 'eu-west-1');
+
+program
+  .command('message <queue>')
+  .description('Messages the specified queue')
+  .option('-m, --message-source <path>', 'Specifies the file containing the message that needs to be sent to SQS')
+  .option('-t, --total <n>', 'The total number of messages to send. It defaults to 1', 1, parseInt)
+  .action(function (queue, options) {
+    checkOption('messageSource', options);
+      
+    var postman = new Postman({ awsProfile: program.awsProfile});
+    postman.sendMessage({
+      queueName: queue,
+      messageSource: options.messageSource,
+      total: options.total
+    }, function (err, result) {
+      if (err) return console.log(err);
+      console.log(result);
+    });
+  })
+  .on('--help', function () {
+    console.log('  Examples:');
+    console.log();
+    console.log('    $ postman message my-queue --message-source ./my-message.json');
+    console.log('    $ postman message my-queue --message-source ./my-message.json --total 100');
+    console.log();
+  });
+
+program
+  .command('stats <queue>')
+  .description('Gets queue stats')
+  .action(function (queue) {
+    debug('messaging queue %s using aws profile %s with region %s', queue, program.awsProfile, program.awsRegion);
+
+    var postman = new Postman({ awsProfile: program.awsProfile });
+
+    postman.getQueueUrl(queue, function (err, queueUrl) {
+      if (err) return console.log(err);
+
+      postman.getStats(queueUrl, function (err, stats) {
+        if (err) return console.log(err);
+
+        console.log(stats);
+      });
+    });        
+  });
+
+program.parse(process.argv);
+
+if (!program.args.length) program.help();
