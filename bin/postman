@@ -23,12 +23,14 @@ program
 program
   .command('message <queue>')
   .description('Messages the specified queue')
+  .option('-c, --concurrent-producers <n>', 'Specifies the total number of batches that will be processed in parallel. It defaults to 5', 5, parseInt)
   .option('-m, --message-source <path>', 'Specifies the file containing the message that needs to be sent to SQS')
   .option('-t, --total <n>', 'The total number of messages to send. It defaults to 1', 1, parseInt)
   .action(function (queue, options) {
     checkOption('messageSource', options);
       
-    var postman = new Postman({ awsProfile: program.awsProfile});
+    var postman = new Postman({ awsProfile: program.awsProfile, awsRegion: program.awsRegion, concurrentProducers: program.concurrentProducers });
+    
     postman.sendMessage({
       queueName: queue,
       messageSource: options.messageSource,
@@ -52,7 +54,7 @@ program
   .action(function (queue) {
     debug('messaging queue %s using aws profile %s with region %s', queue, program.awsProfile, program.awsRegion);
 
-    var postman = new Postman({ awsProfile: program.awsProfile });
+    var postman = new Postman({ awsProfile: program.awsProfile, awsRegion: program.awsRegion, concurrentProducers: program.concurrentProducers });
 
     postman.getQueueUrl(queue, function (err, queueUrl) {
       if (err) return console.log(err);
