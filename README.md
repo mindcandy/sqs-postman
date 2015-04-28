@@ -5,12 +5,12 @@ A simple tool for sending messages to AWS SQS
 It comes with the following features out of the box:
 
 - Sends messages in batches of up to 10 messages at a time
-- Batches are sent out in parallel of up to 2 batches at a time
+- Batches are sent out in parallel using a default of `10` producers, which can be configured using the `--concurrent-producers` option
 
 ## Installation
 
 ```bash
-$ npm install -g git+ssh://git@github.com:mindcandy/postman.git
+$ npm install -g git@github.com:mindcandy/postman.git
 ```
 
 ## AWS Configuration
@@ -73,10 +73,16 @@ Send message to queue using custom AWS profile
 $ postman message my-queue --aws-profile my-profile --message-source ./message.json
 ```
 
-Sends 15 messages to queue using custom profile and specific AWS region
+Send 15 messages to queue using custom profile and specific AWS region
 
 ```bash
 $ postman message my-queue --aws-profile my-profile --aws-region us-east-1 --message-source ./message.json --total 15
+```
+
+Send 1000 messages using 20 concurrent producers
+
+```bash
+$ postman message my-queue --message-source ./message.json --total 1000 --concurrent-producers 20
 ```
 
 ## Debugging
