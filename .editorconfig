@@ -1,0 +1,23 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+
+# JavaScripts, JSON and Stylus
+[*.{js,json,styl}]
+indent_size = 2
+
+# HTML and Jade Templates
+[*.{html,jade}]
+indent_style = 4
+
+# Markdown and Jade Templates
+[*.{md,jade}]
+trim_trailing_whitespace = false

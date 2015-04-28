@@ -10,7 +10,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     meta: {
-      lintFiles: grunt.file.expand(['Gruntfile.js', 'bin/postman', 'lib/**/*.js']),
+      lintFiles: grunt.file.expand(['Gruntfile.js', 'bin/postman', 'lib/**/*.js', 'test/**/*.js']),
       testFiles: grunt.file.expand(['test/**/*.js'])
     },
 
