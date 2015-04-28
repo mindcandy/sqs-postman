@@ -33,12 +33,12 @@ For configuring AWS credentials, please go [here](http://docs.aws.amazon.com/AWS
 ### getQueueUrl(queueName, cb)
 
 - `queueName` - the name of the SQS queue
-- cb(err, queueUrl) - a callback which is called with either the `queueUrl` or an error if any
+- `cb(err, queueUrl)` - a callback which is called with either the `queueUrl` or an error if any
 
 ### getStats(queueUrl, cb)
 
 - `queueUrl` - the queueUrl
-- cb(err, stats) - a callback which is called with either the queue stats or an error if any
+- `cb(err, stats)` - a callback which is called with either the queue stats or an error if any
 
 ## Command Line
 
