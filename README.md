@@ -93,6 +93,30 @@ Postman uses the [debug](https://github.com/visionmedia/debug) module, and can b
 $ DEBUG=postman* postman ...
 ```
 
+## How to do releases
+
+Releases are performed via Grunt. It can handle patch, minor and major releases using the [Semantic Versioning Specification](http://semver.org/).
+
+```bash
+$ grunt release:{versionType}
+```
+
+where {versionType} is any of patch, minor, major. e.g.: if I wanted to do a patch release, I would have to execute the following:
+
+```bash
+$ grunt release:patch
+```
+
+Sometimes the release process might fail (git error). The failure has to do with git not being able to push to the remote repo. The fix is easy; just run:
+
+```bash
+$ git push origin master --tags
+```
+
+## Contributing
+
+Contributions are always welcome! Just follow the normal fork > branch > pull request workflow.
+
 ## License
 
 MIT
