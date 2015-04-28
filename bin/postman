@@ -28,15 +28,18 @@ program
   .option('-t, --total <n>', 'The total number of messages to send. It defaults to 1', 1, parseInt)
   .action(function (queue, options) {
     checkOption('messageSource', options);
-      
+
     var postman = new Postman({ awsProfile: program.awsProfile, awsRegion: program.awsRegion, concurrentProducers: program.concurrentProducers });
-    
+
     postman.sendMessage({
       queueName: queue,
       messageSource: options.messageSource,
       total: options.total
     }, function (err, result) {
-      if (err) return console.log(err);
+      if (err) {
+        return console.log(err);
+      }
+
       console.log(result);
     });
   })
@@ -57,16 +60,22 @@ program
     var postman = new Postman({ awsProfile: program.awsProfile, awsRegion: program.awsRegion, concurrentProducers: program.concurrentProducers });
 
     postman.getQueueUrl(queue, function (err, queueUrl) {
-      if (err) return console.log(err);
+      if (err) {
+        return console.log(err);
+      }
 
       postman.getStats(queueUrl, function (err, stats) {
-        if (err) return console.log(err);
+        if (err) {
+          return console.log(err);
+        }
 
         console.log(stats);
       });
-    });        
+    });
   });
 
 program.parse(process.argv);
 
-if (!program.args.length) program.help();
+if (!program.args.length) {
+  program.help();
+}
