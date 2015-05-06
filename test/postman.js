@@ -143,7 +143,7 @@ describe('postman', function () {
         sqsMock.sendMessageBatch.yields(null, 'batch');
 
         postman.sendMessage(messageOptions, function (err, result) {
-          var args = sqsMock.sendMessageBatch.getCall(0).args;
+          var args = sqsMock.sendMessageBatch.firstCall.args;
           var sqsOptionsArg = args[0];
 
           assert(sqsOptionsArg.QueueUrl, queueUrl);
@@ -152,7 +152,35 @@ describe('postman', function () {
         });
       });
 
-      it('should create the correct number of entries', function (done) {
+      it('should contain batches with no more than 10 entries', function (done) {
+        var postman = new Postman(sqsMock, {});
+        var messageOptions = {
+          queueName: queueName,
+          messageSource: __dirname + '/message.json',
+          total: 15
+        };
+
+        sqsMock.sendMessageBatch.yields(null, 'batch');
+
+        var expectedBatches = Math.ceil(15 / 10);
+
+        postman.sendMessage(messageOptions, function (err, result) {
+          var args = null;
+          var sqsOptionsArg = null;
+          for (var i = 0; i < expectedBatches; i++) {
+            args = sqsMock.sendMessageBatch.getCall(i).args;
+            sqsOptionsArg = args[0];
+            assert(sqsOptionsArg.Entries.length <= 10);
+          }
+
+          assert(sqsMock.sendMessageBatch.callCount, expectedBatches);
+
+          done();
+        });
+
+      });
+
+      it('should call the callback with an error if one of the batches fails', function (done) {
         var postman = new Postman(sqsMock, {});
         var messageOptions = {
           queueName: queueName,
@@ -160,17 +188,14 @@ describe('postman', function () {
           total: 10
         };
 
-        sqsMock.sendMessageBatch.yields(null, 'batch');
+        var expectedError = new Error('Oops! the batches have failed');
+
+        sqsMock.sendMessageBatch.yields(expectedError);
 
         postman.sendMessage(messageOptions, function (err, result) {
-          var args = sqsMock.sendMessageBatch.getCall(0).args;
-          var sqsOptionsArg = args[0];
-
-          assert(sqsOptionsArg.Entries.length, messageOptions.total);
-
+          assert(err, expectedError);
           done();
         });
-
       });
 
     });
