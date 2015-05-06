@@ -13,8 +13,32 @@ describe('postman', function () {
 
   var sqsMock = {
     getQueueUrl: sandbox.stub(),
-    getQueueAttributes: sandbox.stub()
+    getQueueAttributes: sandbox.stub(),
+    sendMessageBatch: sandbox.stub()
   };
+
+  var debugMock = sandbox.stub();
+  var pathMock = {
+    resolve: sandbox.stub()
+  };
+  var uuidMock = {
+    v4: sandbox.stub()
+  };
+  var asyncMock = {
+  };
+  var awsMock = {};
+
+  before(function () {
+    underTest.__set__({
+      // debug: debugMock,
+      // path: pathMock,
+      // uuid: uuidMock,
+      // async: asyncMock,
+      AWS: awsMock
+    });
+
+    // configStub.get.withArgs('public').returns(dummyPublicConfig);
+  });
 
   describe('constructor', function () {
 
@@ -102,6 +126,51 @@ describe('postman', function () {
           assert.deepEqual(stats, { messages: sqsResponse.Attributes.ApproximateNumberOfMessages });
           done();
         });
+      });
+
+    });
+
+    describe('#sendMessage()', function () {
+
+      it('should use the right queue URL', function (done) {
+        var postman = new Postman(sqsMock, {});
+        var messageOptions = {
+          queueName: queueName,
+          messageSource: __dirname + '/message.json',
+          total: 10
+        };
+
+        sqsMock.sendMessageBatch.yields(null, 'batch');
+
+        postman.sendMessage(messageOptions, function (err, result) {
+          var args = sqsMock.sendMessageBatch.getCall(0).args;
+          var sqsOptionsArg = args[0];
+
+          assert(sqsOptionsArg.QueueUrl, queueUrl);
+
+          done();
+        });
+      });
+
+      it('should create the correct number of entries', function (done) {
+        var postman = new Postman(sqsMock, {});
+        var messageOptions = {
+          queueName: queueName,
+          messageSource: __dirname + '/message.json',
+          total: 10
+        };
+
+        sqsMock.sendMessageBatch.yields(null, 'batch');
+
+        postman.sendMessage(messageOptions, function (err, result) {
+          var args = sqsMock.sendMessageBatch.getCall(0).args;
+          var sqsOptionsArg = args[0];
+
+          assert(sqsOptionsArg.Entries.length, messageOptions.total);
+
+          done();
+        });
+
       });
 
     });
