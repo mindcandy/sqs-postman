@@ -14,6 +14,12 @@ function checkOption(optionName, options) {
   }
 }
 
+function handleError(err) {
+  console.log('  err:', err.message);
+  console.log();
+  process.exit(1);
+}
+
 // program config
 program
   .version(package.version)
@@ -37,7 +43,7 @@ program
       total: options.total
     }, function (err, result) {
       if (err) {
-        return console.log(err);
+        return handleError(err);
       }
 
       console.log(result);
@@ -61,12 +67,12 @@ program
 
     postman.getQueueUrl(queue, function (err, queueUrl) {
       if (err) {
-        return console.log(err);
+        return handleError(err);
       }
 
       postman.getStats(queueUrl, function (err, stats) {
         if (err) {
-          return console.log(err);
+          return handleError(err);
         }
 
         console.log(stats);
