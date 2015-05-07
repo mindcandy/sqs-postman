@@ -88,7 +88,7 @@ Postman can also be included on any project and used programmatically.
 Postman uses the [debug](https://github.com/visionmedia/debug) module, and can be enabled as follows:
 
 ```bash
-$ DEBUG=postman* postman ...
+$ DEBUG=sqs-postman* postman ...
 ```
 
 ## How to do releases
