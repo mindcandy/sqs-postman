@@ -1,4 +1,4 @@
-# postman
+# sqs-postman
 
 A simple tool for sending messages to AWS SQS
 
