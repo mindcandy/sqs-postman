@@ -1,6 +1,6 @@
 {
   "name": "sqs-postman",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple tool for sending messages to AWS SQS",
   "repository": {
     "type": "git",
