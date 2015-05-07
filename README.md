@@ -10,7 +10,7 @@ It comes with the following features out of the box:
 ## Installation
 
 ```bash
-$ npm install -g git@github.com:mindcandy/sqs-postman.git
+$ npm install -g sqs-postman
 ```
 
 ## AWS Configuration
