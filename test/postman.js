@@ -10,6 +10,7 @@ describe('postman', function () {
 
   var queueName = 'my-test-queue';
   var queueUrl = 'http://aws/' + queueName;
+  var messageSource = __dirname + '/message.json';
 
   var sqsMock = {
     getQueueUrl: sandbox.stub(),
@@ -17,30 +18,43 @@ describe('postman', function () {
     sendMessageBatch: sandbox.stub()
   };
 
-  var debugMock = sandbox.stub();
-  var pathMock = {
-    resolve: sandbox.stub()
+  var awsMock = {
+    config: {
+      update: sandbox.stub()
+    },
+    SharedIniFileCredentials: sandbox.stub(),
+    SQS: sandbox.stub()
   };
-  var uuidMock = {
-    v4: sandbox.stub()
-  };
-  var asyncMock = {
-  };
-  var awsMock = {};
 
   before(function () {
     underTest.__set__({
-      // debug: debugMock,
-      // path: pathMock,
-      // uuid: uuidMock,
-      // async: asyncMock,
       AWS: awsMock
     });
-
-    // configStub.get.withArgs('public').returns(dummyPublicConfig);
   });
 
-  describe('constructor', function () {
+  describe('create', function () {
+
+    it('should configure the AWS region with the default region if none provided', function () {
+      underTest({});
+      assert(awsMock.config.update.calledWith({region: 'eu-west-1'}));
+    });
+
+    it('should configure the AWS region with the one provided', function () {
+      var expectedRegion = 'my-region';
+      underTest({awsRegion: expectedRegion});
+      assert(awsMock.config.update.calledWith({region: expectedRegion}));
+    });
+
+    it('should use the default AWS profile if none provided', function () {
+      underTest({});
+      assert(awsMock.SharedIniFileCredentials.calledWith({profile: 'default'}));
+    });
+
+    it('should use the provided AWS profile', function () {
+      var expectedProfile = 'my-profile';
+      underTest({awsProfile: expectedProfile});
+      assert(awsMock.SharedIniFileCredentials.calledWith({profile: expectedProfile}));
+    });
 
   });
 
@@ -136,7 +150,7 @@ describe('postman', function () {
         var postman = new Postman(sqsMock, {});
         var messageOptions = {
           queueName: queueName,
-          messageSource: __dirname + '/message.json',
+          messageSource: messageSource,
           total: 10
         };
 
@@ -156,7 +170,7 @@ describe('postman', function () {
         var postman = new Postman(sqsMock, {});
         var messageOptions = {
           queueName: queueName,
-          messageSource: __dirname + '/message.json',
+          messageSource: messageSource,
           total: 15
         };
 
@@ -184,7 +198,7 @@ describe('postman', function () {
         var postman = new Postman(sqsMock, {});
         var messageOptions = {
           queueName: queueName,
-          messageSource: __dirname + '/message.json',
+          messageSource: messageSource,
           total: 10
         };
 
@@ -194,6 +208,22 @@ describe('postman', function () {
 
         postman.sendMessage(messageOptions, function (err, result) {
           assert(err, expectedError);
+          done();
+        });
+      });
+
+      it('should call the callback with success if everything works nicely', function (done) {
+        var postman = new Postman(sqsMock, {});
+        var messageOptions = {
+          queueName: queueName,
+          messageSource: messageSource,
+          total: 10
+        };
+
+        sqsMock.sendMessageBatch.yields(null, 'batch');
+
+        postman.sendMessage(messageOptions, function (err, result) {
+          assert(result, 'done');
           done();
         });
       });
