@@ -1,12 +1,18 @@
 {
-  "name": "postman",
+  "name": "sqs-postman",
   "version": "0.1.0",
-  "description": "Small app that sends many messages to AWS SQS",
+  "description": "A simple tool for sending messages to AWS SQS",
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:mindcandy/postman.git"
+    "url": "https://github.com/mindcandy/sqs-postman.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mindcandy/sqs-postman/issues"
   },
   "main": "index.js",
+  "engines": {
+    "node": ">= 0.6.x"
+  },
   "bin": {
     "postman": "./bin/postman"
   },
@@ -16,9 +22,13 @@
   "keywords": [
     "aws",
     "sqs",
-    "messages"
+    "messages",
+    "batch"
   ],
-  "author": "Jose Maria Nunez-Izu",
+  "author": {
+    "name": "Jose Maria Nunez-Izu",
+    "email": "jmnunezizu@gmail.com"
+  },
   "license": "MIT",
   "dependencies": {
     "async": "^0.9.0",
