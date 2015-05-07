@@ -1,6 +1,6 @@
 {
   "name": "postman",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Small app that sends many messages to AWS SQS",
   "repository": {
     "type": "git",
