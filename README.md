@@ -2,6 +2,9 @@
 
 A simple tool for sending messages to AWS SQS
 
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+
 It comes with the following features out of the box:
 
 - Sends messages in batches of up to 10 messages at a time (AWS limit)
@@ -110,3 +113,8 @@ Contributions are always welcome! Just follow the normal fork > branch > pull re
 ## License
 
 MIT
+
+[npm-image]: https://img.shields.io/npm/v/sqs-postman.svg
+[npm-url]: https://npmjs.org/package/sqs-postman
+[downloads-image]: https://img.shields.io/npm/dm/sqs-postman.svg
+[downloads-url]: https://npmjs.org/package/sqs-postman
