@@ -91,6 +91,18 @@ Postman uses the [debug](https://github.com/visionmedia/debug) module, and can b
 $ DEBUG=sqs-postman* postman ...
 ```
 
+## Performance Tests
+
+| Messages |   aws-cli  | sqs-postman |
+| -------- | ---------- | ----------- |
+|      100 |  0m 4.956s |    0m 0.90s |
+|     1000 | 2m 31.457s |    0m 4.18s |
+|    10000 | 8m 30.715s |   0m 30.83s |
+
+The difference in performance between aws-cli and sqs-postman is huge! Because of sqs-postman's ability to process batches in parallel (async), the execution time can be reduced quite considerably.
+
+These tests were performed on a Macbook Pro 15-inch, Mid 2012 with a 2.6 GHz Intel Core i7 Processor and 16 GB 1600 MHz DDR3 of RAM. And time was measured using Unix `time`.
+
 ## Contributing
 
 Contributions are always welcome! Just follow the normal fork > branch > pull request workflow.
